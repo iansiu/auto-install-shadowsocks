@@ -1,8 +1,9 @@
 我的邮箱：youweixiao@163.com
 
 
-
 因为在学习Linux，加上自己也要用，就顺手整了个，适用于CentOS 6.5 和 CentOS 6.6。
+
+其实主要是这里托管代码比较方便才放在这里，算不上什么项目，都是些垃圾代码，当然如果能帮助到你，我会很荣幸的。
 
 这个shell脚本安装的是Python版本的Shadowsocks，不适用于其它版本，整合了autoban掉IP的功能，顺便加了iptables保存防火墙规则，和在ban掉IP的同时发邮件到指定的邮箱。
 
