@@ -30,9 +30,9 @@ else
         	yum -y install $i
 		fi
 	done
-	#yum -y update
-	#easy_install pip
-	#easy_install argparse
+	yum -y update
+	easy_install pip
+	easy_install argparse
 	pip install shadowsocks
 	\cp autoban.py ~/autoban.py 
 
