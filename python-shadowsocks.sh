@@ -27,7 +27,7 @@ function print_error () {
     echo -e "\x1B[01;31m[-]\x1B[0m $1"
 }
 
-funciton install_configure() {
+function install_configure() {
 
 if [ $UID != "0" ]; then
 	print_error "Please use the root user"
@@ -51,7 +51,7 @@ else
 
 echo "{
      \"server\":\"0.0.0.0\",
-     \"server_port\":1500,
+     \"server_port\":443,
      \"local_port\":1080,
      \"password\":\"hello123\",
      \"timeout\":600,
@@ -68,6 +68,14 @@ autorestart=true
 startsecs=3
 redirect_stderr=true
 stdout_logfile=/var/log/shadowsocks.log">>/etc/supervisord.conf
+
+
+##### 调整ulimit值 #####
+
+	ulimit -n 51200
+
+	sed -i '41a \* soft nofile 51200' /etc/security/limits.conf
+	sed -i '42a \* hard nofile 51200' /etc/security/limits.conf
 
 
 ##### 优化TCP连接  #####
