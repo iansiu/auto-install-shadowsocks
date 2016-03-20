@@ -11,11 +11,16 @@ wget -qO- http://www.longshanren.net/soft/autoss.sh | sh
 
 使用方法：
 
-启动：sss start
-重启：sss restart
-关闭：sss stop
-状态：sss status
-重新加载：sss force-reload
+启动：sss start  
+
+重启：sss restart  
+
+关闭：sss stop  
+
+状态：sss status  
+
+重新加载：sss force-reload  
+
 
 
 不需要设置开机启动，scripts已经自动设置了。
