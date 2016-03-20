@@ -79,14 +79,6 @@ else
 
     sed -i 's/^\t//g' /etc/supervisord.conf
 
-##### 调整ulimit值 #####
-
-	ulimit -n 51200
-
-	sed -i '41a \* soft nofile 51200' /etc/security/limits.conf
-	sed -i '42a \* hard nofile 51200' /etc/security/limits.conf
-
-
 ##### iptables 放行端口  #####
 
     iptables -I INPUT -p tcp --dport $port -j ACCEPT
@@ -129,7 +121,7 @@ else
     chkconfig --add supervisord
     chkconfig supervisord on
     service supervisord start
-	print_good "shadowsocks successful installation"
+    print_good "shadowsocks successful installation"
     print_good "Server IP:  $serverip"
     print_good "Port:       $port "
     print_good "Method:     $method"
