@@ -120,7 +120,8 @@ else
     wget http://longshanren.net/soft/supervisord -O /etc/init.d/supervisord && chmod 755 /etc/init.d/supervisord
     chkconfig --add supervisord
     chkconfig supervisord on
-    service supervisord start
+    ln -sf /etc/init.d/supervisord /usr/bin/sss
+    sss start
     print_good "shadowsocks successful installation"
     print_good "Server IP:  $serverip"
     print_good "Port:       $port "
