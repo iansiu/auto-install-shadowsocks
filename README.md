@@ -6,7 +6,7 @@
 
 3、安装方法如下：
 
-wget -qO- http://www.longshanren.net/soft/autoss.sh | sh
+wget http://www.longshanren.net/soft/autoss.sh -O - | sh
 
 
 使用方法：
