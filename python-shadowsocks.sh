@@ -18,8 +18,9 @@ function begin_time()
 
 #####   定义       #####
 
-rely=(epel-release python-setuptools m2crypto)
-serverip=`ifconfig|grep -v 127.0.0.1|sed -n '/inet addr/s/^[^:]*:\([0-9.]\{7,15\}\) .*/\1/p'`
+rely=(epel-release python-setuptools m2crypto libevent unzip wget gcc gcc-c++ python-devel)
+piprely=(greenlet gevent gevent supervisor shadowsocks)
+serverip=`ifconfig eht0|grep -v 127.0.0.1|sed -n '/inet addr/s/^[^:]*:\([0-9.]\{7,15\}\) .*/\1/p'`
 port='8358'
 passwd='hello123'
 method='rc4-md5'
@@ -46,17 +47,20 @@ if [[ $system != $syst_version ]]; then
     exit 1
 else
      for i in ${rely[*]}; do
-    	if ! rpm -q "$i">/dev/null ; then
-        	yum -y install $i
-		fi
-	done
-	easy_install pip
-	easy_install argparse
-	pip install supervisor
-	pip install shadowsocks
+         if ! rpm -q "$i">/dev/null ; then
+            yum -y install $i
+         fi
+     done
 
-    echo "
-    {
+     easy_install pip && easy_install argparse
+
+     for p in ${piprely[*]}; do
+         if ! pip show "$p">/dev/null ; then
+             pip install $p
+         fi
+     done
+
+    echo "{
      \"server\":\"$serverip\",
      \"server_port\":$port,
      \"local_port\":1080,
@@ -65,10 +69,19 @@ else
      \"method\":\"$method\"
     }" >/etc/shadowsocks.json
 
-    sed -i 's/^\t//g' /etc/shadowsocks.json
-
+    sed -i '8s/^    //g' /etc/shadowsocks.json
     echo_supervisord_conf >/etc/supervisord.conf
 
+    if [[ "$?" != 0 ]] ; then
+    	wget --no-check-certificate  https://pypi.python.org/packages/source/d/distribute/distribute-0.7.3.zip
+        unzip distribute-0.7.3.zip
+        cd distribute-0.7.3
+        python setup.py install
+        wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python
+        echo_supervisord_conf >/etc/supervisord.conf
+    fi
+
+    echo "" >>/etc/supervisord.conf
     echo '[program:shadowsocks]
     command=ssserver -c /etc/shadowsocks.json
     autostart=true
@@ -77,7 +90,7 @@ else
     redirect_stderr=true
     stdout_logfile=/var/log/shadowsocks.log' >>/etc/supervisord.conf
 
-    sed -i 's/^\t//g' /etc/supervisord.conf
+    sed -i 's/^    //g' /etc/supervisord.conf
 
 ##### iptables 放行端口  #####
 
@@ -94,8 +107,7 @@ else
     #ln -s /bin/true /sbin/sysctl
 	#默认关闭，OpenVZ VPS用得上。
 
-    echo '
-    net.ipv4.tcp_syncookies = 1
+    echo 'net.ipv4.tcp_syncookies = 1
     net.ipv4.tcp_tw_reuse = 1
     net.ipv4.tcp_tw_recycle = 1
     net.ipv4.tcp_fin_timeout = 30
@@ -111,42 +123,50 @@ else
     net.ipv4.tcp_mtu_probing=1 ' >/etc/sysctl.conf
     #net.ipv4.tcp_congestion_control=hybla' >/etc/sysctl.conf ## 内核支持才可以
 
-    sed -i 's/^\t//g' /etc/sysctl.conf
-	sysctl -p
+    sed -i 's/^    //g' /etc/sysctl.conf
+    sysctl -p
 
 ##### 安装Denyhosts防止SSH暴力破解和supervisor用于守护进程 #####
 
-    wget -qO- http://longshanren.net/auto_install_denyhosts.sh -O ~/auto_install_denyhosts.sh | sh
-    wget http://longshanren.net/soft/supervisord -O /etc/init.d/supervisord && chmod 755 /etc/init.d/supervisord
+    #wget http://longshanren.net/auto_install_denyhosts.sh -O ~/auto_install_denyhosts.sh -O - | sh
+    wget http://longshanren.net/soft/supervisord -O /etc/init.d/supervisord && chmod 755 /etc/init.d/supervisord || exit 1
     chkconfig --add supervisord
     chkconfig supervisord on
     ln -sf /etc/init.d/supervisord /usr/bin/sss
     sss start
-    print_good "shadowsocks successful installation"
-    print_good "Server IP:  $serverip"
-    print_good "Port:       $port "
-    print_good "Method:     $method"
-    print_good "Local IP:   127.0.0.1"
-    print_good "Local port: 1090"
+    clear
+    echo ""
+    print_good "*******************************************************************************************************"
+    print_good ""
+    print_good "		shadowsocks successful installation"
+    print_good ""
+    print_good "		Server IP:  $serverip"
+    print_good "		Port:       $port "
+    print_good "		Method:     $method"
+    print_good "		Local IP:   127.0.0.1"
+    print_good "		Local port: 1080"
+    print_good ""
+
 fi
 
 }
 
 function end_time()
 {
-    echo ""
     end_year_month_day=`date +%-Y年%-m月%-d日`
     end_hours=`date +%-H`
     end_minute=`date +%-M`
     end_second=`date +%-S`
 
-    echo "从 $begin_year_month_day$begin_hours:$begin_minute:$begin_second 开始安装，到 $end_year_month_day$end_hours:$end_minute:$end_second 安装完成."
-    echo ""
-    echo 一共耗费了 $[$end_hours-begin_hours] 小时 $[$end_minute-begin_minute] 分钟 $[$end_second-$begin_second] 秒|sed 's/\-//'
-    echo ""
+    print_good "		从 $begin_year_month_day $begin_hours:$begin_minute:$begin_second 开始，于 $end_year_month_day $end_hours:$end_minute:$end_second 完成."
+    print_good ""
+    print_good "            一共耗费了 $[$end_hours-begin_hours] 小时 $[$end_minute-begin_minute] 分钟 $[$end_second-$begin_second] 秒"|sed 's/\-//'
+    print_good ""
+    print_good "*******************************************************************************************************"
+    print_good ""
 }
 
     begin_time;install_configure;end_time
 
     rm -rf DenyHosts-2.6  DenyHosts-2.6.tar.gz  auto_install_denyhosts.sh
-    rm -rf $0
+    #rm -rf $0
