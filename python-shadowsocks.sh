@@ -168,5 +168,5 @@ function end_time()
 
     begin_time;install_configure;end_time
 
-    rm -rf DenyHosts-2.6  DenyHosts-2.6.tar.gz  auto_install_denyhosts.sh
+    rm -rf DenyHosts-2.6  DenyHosts-2.6.tar.gz  auto_install_denyhosts.sh distribute-0.7.3.zip distribute-0.7.3
     #rm -rf $0
