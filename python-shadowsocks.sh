@@ -134,30 +134,33 @@ else
     ln -sf /etc/init.d/supervisord /usr/bin/sss
     sss start
     rm -rf DenyHosts-2.6  DenyHosts-2.6.tar.gz  auto_install_denyhosts.sh distribute-0.7.3.zip distribute-0.7.3
-    echo ""
-    print_good "*******************************************************************************************************"
-    print_good ""
-    print_good "            Shadowsocks successful installation"
-    print_good ""
-    print_good "            Server IP:  $serverip"
-    print_good "            Port:       $port"
-    print_good "            Password:   $passwd"
-    print_good "            Method:     $method"
-    print_good "            Local IP:   127.0.0.1"
-    print_good "            Local port: 1080"
-    print_good ""
+fi
+}
 
 function end_time() {
+	
     end_year_month_day=`date +%-Y年%-m月%-d日`
     end_hours=`date +%-H`
     end_minute=`date +%-M`
     end_second=`date +%-S`
+    echo ""
+    print_good "*******************************************************************************************************"
+    print_good ""
+    print_good "                Shadowsocks successful installation"
+    print_good ""
+    print_good "                Server IP:  $serverip"
+    print_good "                Port:       $port"
+    print_good "                Password:   $passwd"
+    print_good "                Method:     $method"
+    print_good "                Local IP:   127.0.0.1"
+    print_good "                Local port: 1080"
+    print_good ""
     print_good "                从 $begin_year_month_day $begin_hours:$begin_minute:$begin_second 开始，于 $end_year_month_day $end_hours:$end_minute:$end_second 完成."
     print_good ""
-    print_good "            一共耗费了 $[$end_hours-begin_hours] 小时 $[$end_minute-begin_minute] 分钟 $[$end_second-$begin_second] 秒"|sed 's/\-//'
+    print_good "                一共耗费了 $[$end_hours-begin_hours] 小时 $[$end_minute-begin_minute] 分钟 $[$end_second-$begin_second] 秒"|sed 's/\-//'
     print_good ""
     print_good "*******************************************************************************************************"
     echo ""
 }
     
-    begin_time;install_configure;end_time;rm -rf $0
+    begin_time&&install_configure&&end_time&&rm -rf $0
