@@ -20,7 +20,7 @@ function begin_time()
 
 rely=(epel-release python-setuptools m2crypto libevent unzip wget gcc gcc-c++ python-devel)
 piprely=(greenlet gevent gevent supervisor shadowsocks)
-serverip=`ifconfig eht0|grep -v 127.0.0.1|sed -n '/inet addr/s/^[^:]*:\([0-9.]\{7,15\}\) .*/\1/p'`
+serverip=`ifconfig | grep -v 127.0.0.1|sed -n '/inet addr/s/^[^:]*:\([0-9.]\{7,15\}\) .*/\1/p'`
 port='8358'
 passwd='hello123'
 method='rc4-md5'
@@ -142,6 +142,7 @@ else
     print_good ""
     print_good "		Server IP:  $serverip"
     print_good "		Port:       $port "
+    print_good "                Password:   $password"
     print_good "		Method:     $method"
     print_good "		Local IP:   127.0.0.1"
     print_good "		Local port: 1080"
@@ -163,10 +164,8 @@ function end_time()
     print_good "            一共耗费了 $[$end_hours-begin_hours] 小时 $[$end_minute-begin_minute] 分钟 $[$end_second-$begin_second] 秒"|sed 's/\-//'
     print_good ""
     print_good "*******************************************************************************************************"
-    print_good ""
+    echo ""
 }
-
-    begin_time;install_configure;end_time
-
     rm -rf DenyHosts-2.6  DenyHosts-2.6.tar.gz  auto_install_denyhosts.sh distribute-0.7.3.zip distribute-0.7.3
-    #rm -rf $0
+    rm -rf $0
+    begin_time;install_configure;end_time
