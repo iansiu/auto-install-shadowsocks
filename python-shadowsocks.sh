@@ -8,8 +8,7 @@
 
 ######  统计时间    ######
 
-function begin_time()
-{
+function begin_time() {
     begin_year_month_day=`date +%-Y年%-m月%-d日`
     begin_hours=`date +%-H`
     begin_minute=`date +%-M`
@@ -134,7 +133,7 @@ else
     chkconfig supervisord on
     ln -sf /etc/init.d/supervisord /usr/bin/sss
     sss start
-    clear
+    rm -rf DenyHosts-2.6  DenyHosts-2.6.tar.gz  auto_install_denyhosts.sh distribute-0.7.3.zip distribute-0.7.3
     echo ""
     print_good "*******************************************************************************************************"
     print_good ""
@@ -148,9 +147,7 @@ else
     print_good "            Local port: 1080"
     print_good ""
 
-function end_time()
-
-{
+function end_time() {
     end_year_month_day=`date +%-Y年%-m月%-d日`
     end_hours=`date +%-H`
     end_minute=`date +%-M`
@@ -162,6 +159,5 @@ function end_time()
     print_good "*******************************************************************************************************"
     echo ""
 }
-    rm -rf DenyHosts-2.6  DenyHosts-2.6.tar.gz  auto_install_denyhosts.sh distribute-0.7.3.zip distribute-0.7.3
-    rm -rf $0
-    begin_time;install_configure;end_time
+    
+    begin_time;install_configure;end_time;rm -rf $0
