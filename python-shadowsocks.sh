@@ -142,7 +142,7 @@ else
     print_good ""
     print_good "		Server IP:  $serverip"
     print_good "		Port:       $port "
-    print_good "                Password:   $password"
+    print_good "		Password:   $passwd"
     print_good "		Method:     $method"
     print_good "		Local IP:   127.0.0.1"
     print_good "		Local port: 1080"
