@@ -8,7 +8,7 @@
 
 wget http://www.longshanren.net/soft/autoss.sh -O - | sh
 
-使用方法：
+使用方法：(个人版）
 
 启动：sss start  
 
